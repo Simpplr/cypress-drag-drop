@@ -10,7 +10,7 @@ function isAttached(element) {
 
 const DragSimulator = {
   MAX_TRIES: 5,
-  DELAY_INTERVAL_MS: 500,
+  DELAY_INTERVAL_MS: 150,
   counter: 0,
   targetElement: null,
   rectsEqual(r1, r2) {
@@ -133,13 +133,8 @@ const DragSimulator = {
     this.init(sourceWrapper, targetSelector, options)
       .then(() => this.dragstart())
       .then(() => this.dragover())
-      .then((success) => {
-        if (success) {
-          return this.drop().then(() => true)
-        } else {
-          return false
-        }
-      })
+      .then(() => cy.wait(250)) // Hover time
+      .then(() => this.drop().then(() => true));
   },
   move(sourceWrapper, options) {
     const { deltaX, deltaY } = options
